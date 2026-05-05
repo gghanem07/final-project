@@ -1,0 +1,10 @@
+In this assignment, I focused on understanding BREAD(Browse, Read, Edit, Add, Delete) functionality for this application. 
+Working on this project helped me understand how backend APIs, database models, authentication, frontend pages, and testing all work together in a full-stack environment.
+One of the main challenges I faced was configuring the database correctly using Docker. Initially, the application failed because the database tables were not created.
+I resolved this by running the database initialization script and then updating the Docker configuration to automatically create tables on startup. 
+This helped ensure the application works consistently without manual setup. Another challenge was debugging test failures. 
+The tests were initially failing due to database connection issues and coverage permission errors. 
+I fixed these by running tests inside the Docker container and using the `--no-cov` option. This allowed all tests to pass. 
+this assignment, helped with learning more about integration testing, end-to-end testing, and CI/CD pipelines. 
+as well as improving my understanding of how authentication works using JWT and how to protect user-specific data. 
+Overall, this project strengthened my ability to debug issues, work with Docker, and build reliable full-stack applications.
