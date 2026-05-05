@@ -1,55 +1,147 @@
-# Assignment 14 – FastAPI Calculator (BREAD Operations)
+Final Project
+Project Overview
 
-## Overview
-This project is a full-stack FastAPI application that allows users to perform and manage calculations. It implements BREAD (Browse, Read, Edit, Add, Delete) functionality with authentication, database integration, testing, and CI/CD.
+This project is a full-stack calculator management application built using FastAPI, PostgreSQL, Docker, and JWT authentication. Users can securely register, log in, create calculations, edit calculations, delete calculations, and manage their calculation history through a modern web interface.
 
-## Features
-- User registration and login (JWT authentication)
-- Add new calculations
-- Browse all user calculations
-- Read/view specific calculations
-- Edit existing calculations
-- Delete calculations
-- Fully tested with unit, integration, and end-to-end tests
+The application follows BREAD operations (Browse, Read, Edit, Add, Delete) and includes an advanced Undo/Redo feature for calculation updates.
 
----
+# Features 
 
-## Tech Stack
-- FastAPI
-- PostgreSQL
-- SQLAlchemy
-- Docker & Docker Compose
-- Pytest (unit, integration, e2e)
-- GitHub Actions (CI/CD)
+## Authentication & Security
+User registration and login
+JWT-based authentication
+Password hashing for secure credential storage
+Protected API routes
+User-specific calculation access
 
----
+## Calculation Features
+Addition
+Subtraction
+Multiplication
+Division
 
-## How to Run the Application
+## BREAD Operations
+Browse all calculations
+Read/view individual calculations
+Add new calculations
+Edit existing calculations
+Delete calculations
 
-```bash
+## Advanced Feature: Undo / Redo
+Undo previous calculation updates
+Redo reverted calculation updates
+Dynamic UI button enabling/disabling
+State tracking for calculation history
+
+## Front-End Features
+Responsive dashboard UI
+View and edit calculation pages
+Real-time user feedback messages
+Undo/Redo button state management
+
+## Technologies Used
+FastAPI
+PostgreSQL
+SQLAlchemy
+Pydantic
+Docker
+Docker Compose
+JWT Authentication
+Playwright
+Pytest
+GitHub Actions
+HTML / Tailwind CSS / JavaScript
+
+## Project Structure
+app/
+├── models/
+├── routes/
+├── schemas/
+├── templates/
+├── auth/
+├── services/
+└── main.py
+
+tests/
+├── unit/
+├── integration/
+└── e2e/
+
+## Running the Application
+Clone the Repository
+git clone https://github.com/gghanem07/final-project.git
+cd final-project
+
+## Build and Start Containers
 docker compose up --build
 
-to open the site: 
-   http://localhost:8000
+## Access the Application
 
-How to Run Tests:
-   docker compose exec web pytest --no-cov
+Application:
 
-Docker Hub:
-Docker image is available at
-   https://hub.docker.com/r/gghanem07/assignment14
+http://localhost:8000
 
-CI/CD:
-GitHub Actions is configured to:
-   Run tests automatically
-   Build Docker image
-   Scan for vulnerabilities
-   Push image to Docker Hub
+Swagger API Docs:
 
-BREAD Functionality:
-   Browse: View all user calculations
-   Read: View details of a specific calculation
-   Edit: Update calculation values
-   Add: Create new calculations
-   Delete: Remove calculations
+http://localhost:8000/docs
 
+pgAdmin:
+
+http://localhost:5050
+
+# Running Tests
+
+## Run Full Test Suite
+docker compose exec web pytest --no-cov
+## Run Specific Test Suites
+Integration Tests
+docker compose exec web pytest tests/integration --no-cov
+E2E Tests
+docker compose exec web pytest tests/e2e --no-cov
+Unit Tests
+docker compose exec web pytest tests/unit --no-cov
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions for Continuous Integration and Continuous Deployment.
+
+The pipeline automatically:
+
+Runs all tests
+Builds the Docker image
+Pushes the image to Docker Hub after successful builds
+
+## Docker Hub Repository
+
+Docker Image Repository:
+
+https://hub.docker.com/repository/docker/gghanem07/assignment14/general
+
+GitHub Repository
+
+Repository Link:
+
+https://github.com/gghanem07/final-project
+
+## Testing Coverage
+
+The project includes:
+
+Unit Tests
+Integration Tests
+End-to-End (E2E) Tests
+
+Testing validates:
+
+Authentication workflows
+Calculation logic
+API endpoints
+Undo/Redo functionality
+Front-end workflows
+
+## Security Features
+JWT authentication
+Password hashing
+User authorization checks
+Input validation with Pydantic
+Protected calculation ownership
