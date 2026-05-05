@@ -83,7 +83,7 @@ class CalculationResponse(CalculationBase):
     updated_at: datetime
     result: float
 
-    # ✅ NEW FIELDS FOR UNDO / REDO
+    # NEW FIELDS FOR UNDO / REDO
     previous_inputs: Optional[List[float]] = None
     redo_inputs: Optional[List[float]] = None
 
