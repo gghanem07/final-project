@@ -1,10 +1,14 @@
-In this assignment, I focused on understanding BREAD(Browse, Read, Edit, Add, Delete) functionality for this application. 
-Working on this project helped me understand how backend APIs, database models, authentication, frontend pages, and testing all work together in a full-stack environment.
-One of the main challenges I faced was configuring the database correctly using Docker. Initially, the application failed because the database tables were not created.
-I resolved this by running the database initialization script and then updating the Docker configuration to automatically create tables on startup. 
-This helped ensure the application works consistently without manual setup. Another challenge was debugging test failures. 
-The tests were initially failing due to database connection issues and coverage permission errors. 
-I fixed these by running tests inside the Docker container and using the `--no-cov` option. This allowed all tests to pass. 
-this assignment, helped with learning more about integration testing, end-to-end testing, and CI/CD pipelines. 
-as well as improving my understanding of how authentication works using JWT and how to protect user-specific data. 
-Overall, this project strengthened my ability to debug issues, work with Docker, and build reliable full-stack applications.
+This course and the final project, gave me a great insight and an understanding of full-stack software developments. 
+From topics like containerization, testing, authentication, database integration, CI/CD and much more. 
+The biggest area of improvement from me is learning al parts of the application coming together, backend, database and frontend. 
+I really enjoyed working with docker and containerization and directly applying concepts and techniques used by real-world software developers. 
+Another major area of learning was database integration using PostgreSQL and SQLAlchemy. 
+I enjoyed working with databases and connecting them to the application through FastAPI and Pydantic schemas. 
+This project helped me better understand how data flows through an application, how models and schemas interact, and how APIs communicate with the database layer securely
+ and efficiently. One of the most challenging but rewarding parts of the final project was implementing the Undo/Redo feature. 
+ This feature required modifications in multiple layers of the application, including database models, schemas, API routes, frontend buttons, and state management logic. 
+ Debugging the interaction between the frontend and backend taught me a lot about full-stack troubleshooting, API responses, and UI logic synchronized. 
+ Adding dynamic button state management for Undo and Redo also improved the overall user experience and made the project feel more presentable and professional. 
+ Overall, this course gave me practical hands-on experience with technologies and workflows that are widely used in real world software engineering and DevOps environments. 
+ I feel much more confident working with APIs, databases, Docker, CI/CD pipelines, authentication systems, and automated testing. T
+ he hands-on practice this course gave me in development, debugging, deployment, and testing made this one of the most valuable software projects I have completed so far. 
