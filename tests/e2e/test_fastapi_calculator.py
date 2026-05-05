@@ -318,3 +318,95 @@ def test_model_division():
     with pytest.raises(ValueError):
         calc_zero = Calculation.create("division", dummy_user_id, [100, 0])
         calc_zero.get_result()
+def test_undo_redo_calculation_flow(base_url: str):
+    """
+    End-to-end test for undo and redo calculation functionality.
+    """
+
+    user_data = {
+        "first_name": "Undo",
+        "last_name": "Redo",
+        "email": f"undo.redo{uuid4()}@example.com",
+        "username": f"undo_redo_{uuid4()}",
+        "password": "SecurePass123!",
+        "confirm_password": "SecurePass123!"
+    }
+
+    token_data = register_and_login(base_url, user_data)
+    access_token = token_data["access_token"]
+
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    # Create calculation
+    create_url = f"{base_url}/calculations"
+
+    create_payload = {
+        "type": "addition",
+        "inputs": [2, 3],
+        "user_id": "ignored"
+    }
+
+    create_response = requests.post(
+        create_url,
+        json=create_payload,
+        headers=headers
+    )
+
+    assert create_response.status_code == 201
+
+    calculation = create_response.json()
+    calc_id = calculation["id"]
+
+    assert calculation["result"] == 5
+
+    # Update calculation
+    update_url = f"{base_url}/calculations/{calc_id}"
+
+    update_payload = {
+        "inputs": [10, 5]
+    }
+
+    update_response = requests.put(
+        update_url,
+        json=update_payload,
+        headers=headers
+    )
+
+    assert update_response.status_code == 200
+
+    updated_calc = update_response.json()
+
+    assert updated_calc["inputs"] == [10, 5]
+    assert updated_calc["result"] == 15
+
+    # Undo calculation
+    undo_url = f"{base_url}/calculations/{calc_id}/undo"
+
+    undo_response = requests.post(
+        undo_url,
+        headers=headers
+    )
+
+    assert undo_response.status_code == 200
+
+    undo_calc = undo_response.json()
+
+    assert undo_calc["inputs"] == [2, 3]
+    assert undo_calc["result"] == 5
+
+    # Redo calculation
+    redo_url = f"{base_url}/calculations/{calc_id}/redo"
+
+    redo_response = requests.post(
+        redo_url,
+        headers=headers
+    )
+
+    assert redo_response.status_code == 200
+
+    redo_calc = redo_response.json()
+
+    assert redo_calc["inputs"] == [10, 5]
+    assert redo_calc["result"] == 15
