@@ -150,3 +150,45 @@ def test_invalid_inputs_for_division():
     division = Division(user_id=dummy_user_id(), inputs=[10])
     with pytest.raises(ValueError, match="Inputs must be a list with at least two numbers."):
         division.get_result()
+def test_calculation_undo_redo_state_tracking():
+    """
+    Test undo/redo state tracking on a calculation object.
+    """
+    calculation = Addition(
+        user_id=dummy_user_id(),
+        inputs=[2, 3]
+    )
+    calculation.result = calculation.get_result()
+
+    # Simulate edit
+    calculation.previous_inputs = calculation.inputs.copy()
+    calculation.redo_inputs = None
+    calculation.inputs = [10, 5]
+    calculation.result = calculation.get_result()
+
+    assert calculation.inputs == [10, 5]
+    assert calculation.result == 15
+    assert calculation.previous_inputs == [2, 3]
+    assert calculation.redo_inputs is None
+
+    # Simulate undo
+    calculation.redo_inputs = calculation.inputs.copy()
+    calculation.inputs = calculation.previous_inputs
+    calculation.result = calculation.get_result()
+    calculation.previous_inputs = None
+
+    assert calculation.inputs == [2, 3]
+    assert calculation.result == 5
+    assert calculation.previous_inputs is None
+    assert calculation.redo_inputs == [10, 5]
+
+    # Simulate redo
+    calculation.previous_inputs = calculation.inputs.copy()
+    calculation.inputs = calculation.redo_inputs
+    calculation.result = calculation.get_result()
+    calculation.redo_inputs = None
+
+    assert calculation.inputs == [10, 5]
+    assert calculation.result == 15
+    assert calculation.previous_inputs == [2, 3]
+    assert calculation.redo_inputs is None
