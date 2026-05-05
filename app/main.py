@@ -369,7 +369,81 @@ def update_calculation(
     db.refresh(calculation)
     return calculation
 
+# Undo a Calculation Update
+@app.post("/calculations/{calc_id}/undo", response_model=CalculationResponse, tags=["calculations"])
+def undo_calculation(
+    calc_id: str,
+    current_user = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Undo the most recent input update for a calculation.
+    """
+    try:
+        calc_uuid = UUID(calc_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid calculation id format.")
 
+    calculation = db.query(Calculation).filter(
+        Calculation.id == calc_uuid,
+        Calculation.user_id == current_user.id
+    ).first()
+
+    if not calculation:
+        raise HTTPException(status_code=404, detail="Calculation not found.")
+
+    if not calculation.previous_inputs:
+        raise HTTPException(status_code=400, detail="Nothing to undo.")
+
+    calculation.redo_inputs = calculation.inputs.copy()
+    calculation.inputs = calculation.previous_inputs
+    calculation.result = calculation.get_result()
+    calculation.previous_inputs = None
+    calculation.updated_at = datetime.utcnow()
+
+    db.commit()
+    db.refresh(calculation)
+
+    return calculation
+
+
+# Redo a Calculation Update
+@app.post("/calculations/{calc_id}/redo", response_model=CalculationResponse, tags=["calculations"])
+def redo_calculation(
+    calc_id: str,
+    current_user = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Redo the most recent undone input update for a calculation.
+    """
+    try:
+        calc_uuid = UUID(calc_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid calculation id format.")
+
+    calculation = db.query(Calculation).filter(
+        Calculation.id == calc_uuid,
+        Calculation.user_id == current_user.id
+    ).first()
+
+    if not calculation:
+        raise HTTPException(status_code=404, detail="Calculation not found.")
+
+    if not calculation.redo_inputs:
+        raise HTTPException(status_code=400, detail="Nothing to redo.")
+
+    calculation.previous_inputs = calculation.inputs.copy()
+    calculation.inputs = calculation.redo_inputs
+    calculation.result = calculation.get_result()
+    calculation.redo_inputs = None
+    calculation.updated_at = datetime.utcnow()
+
+    db.commit()
+    db.refresh(calculation)
+
+    return calculation
+    
 # Delete a Calculation
 @app.delete("/calculations/{calc_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["calculations"])
 def delete_calculation(
